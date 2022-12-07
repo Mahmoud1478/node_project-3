@@ -1,0 +1,7 @@
+export default {
+    SET_AUTH: 'SET_AUTH',
+    DELETE_AUTH: 'DELETE_AUTH',
+    UPDATE_CART: 'UPDATE_CART',
+    SAVE_CART: 'SAVE_CART',
+    CLOSE_CART: 'CLOSE_CART',
+};

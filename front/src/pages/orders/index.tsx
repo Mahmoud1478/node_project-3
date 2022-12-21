@@ -54,10 +54,11 @@ const Orders = () => {
                             name: 'status',
                         },
                     }}
-                    actions
+                    actions={{
+                        edit: (order: Order) => console.log(order),
+                    }}
                     data={data}
                     isLoading={isLoading}
-                    onEdit={() => {}}
                 />
             }
         </>

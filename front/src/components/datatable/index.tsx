@@ -7,16 +7,14 @@ interface Prop {
             name: string;
         }
     >;
-    actions: boolean;
+    actions: Record<string, CallableFunction>;
     editString?: string;
     deleteString?: string;
     data: unknown[];
     isLoading: boolean;
-    onDelete?: CallableFunction;
-    onEdit?: CallableFunction;
 }
 
-const DataTable = ({ actions, headers, data, isLoading, onDelete, onEdit }: Prop) => {
+const DataTable = ({ actions, headers, data, isLoading }: Prop) => {
     return (
         <>
             <div className="container" style={{ minHeight: '44.2vh' }}>
@@ -59,25 +57,19 @@ const DataTable = ({ actions, headers, data, isLoading, onDelete, onEdit }: Prop
                                                 {(item as Record<string, string | number>)[header]}
                                             </th>
                                         ))}
-                                        {actions ? (
+
+                                        {Object.keys(actions).length ? (
                                             <td>
-                                                {onEdit ? (
+                                                {Object.entries(actions).map((btn, idx) => (
                                                     <button
+                                                        key={idx}
                                                         className="btn btn-outline-dark"
                                                         style={{ marginInlineEnd: '5px' }}
-                                                        onClick={async () => await onEdit(item)}
+                                                        onClick={async () => await btn[1](item)}
                                                     >
-                                                        edit
+                                                        {btn[0]}
                                                     </button>
-                                                ) : null}
-                                                {onDelete ? (
-                                                    <button
-                                                        className="btn btn-outline-dark"
-                                                        onClick={async () => await onDelete(item)}
-                                                    >
-                                                        delete
-                                                    </button>
-                                                ) : null}
+                                                ))}
                                             </td>
                                         ) : null}
                                     </tr>

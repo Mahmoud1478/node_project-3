@@ -2,10 +2,6 @@ import Axios, { AxiosInstance } from 'axios';
 
 const getToken = () => JSON.parse(localStorage.getItem('token') as string);
 
-// const token: {
-//     type: string;
-//     value: string;
-// } | null = JSON.parse(localStorage.getItem('token') as string);
 const axios: AxiosInstance = Axios.create({
     baseURL: import.meta.env['VITE_BASE_URL'] || 'http://localhost:3000',
     timeout: 1000,
@@ -14,5 +10,4 @@ const axios: AxiosInstance = Axios.create({
         Authorization: `${getToken()?.type} ${getToken()?.value}`,
     },
 });
-// console.log(token);
 export default axios;

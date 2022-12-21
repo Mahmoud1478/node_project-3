@@ -166,23 +166,24 @@ const Users = () => {
                             name: 'Last Name',
                         },
                     }}
-                    actions
-                    onDelete={async (user: User) => {
-                        try {
-                            await axios.delete(`/users/${user.id}`);
-                            setReload((prev) => !prev);
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }}
-                    onEdit={async (user: User) => {
-                        setUser({
-                            ...user,
-                            password: '',
-                        });
-                        // @ts-ignore
-                        // eslint-disable-next-line no-undef
-                        bootstrap.Modal.getOrCreateInstance('#update').show();
+                    actions={{
+                        edit: async (user: User) => {
+                            setUser({
+                                ...user,
+                                password: '',
+                            });
+                            // @ts-ignore
+                            // eslint-disable-next-line no-undef
+                            bootstrap.Modal.getOrCreateInstance('#update').show();
+                        },
+                        delete: async (user: User) => {
+                            try {
+                                await axios.delete(`/users/${user.id}`);
+                                setReload((prev) => !prev);
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        },
                     }}
                     isLoading={isLoading}
                     data={data}

@@ -3,10 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let prefix = "";
-if (process.env.ENV === "test") {
-    prefix = "TEST_";
-}
+const dbMap: Record<string, string> = {
+    test: "TEST_",
+    dev: "DEV_",
+    pro: "PRO_",
+};
+const prefix = dbMap[process.env.ENV as string];
+
 const dbProcessor = new Pool({
     host: process.env[`${prefix}DATABASE_HOST`],
     user: process.env[`${prefix}DATABASE_USER`],

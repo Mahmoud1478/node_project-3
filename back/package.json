@@ -1,21 +1,30 @@
 {
-    "name": "project-2",
+    "name": "store-front",
     "version": "1.0.0",
     "description": "",
-    "main": "server.ts",
+    "main": "server.js",
+    "engines": {
+        "node": "18.12.1",
+        "npm" : "8.19.2"
+      },
     "scripts": {
         "jasmine": "jasmine",
         "build": "npx tsc",
-        "test": "ENV=test&& db-migrate --env test reset && db-migrate --env test up && npm run build && npm run jasmine ",
+        "test": "db-migrate --env test reset && db-migrate --env test up && npm run build && ENV='test' npm run jasmine ",
+        "test2": "ENV='test' node dist/server",
         "lint": "eslint src/*.ts src/**/*.ts",
         "format": "prettier --config .prettierrc src/*.ts src/**/*.ts --write",
-        "start": "nodemon src/server.ts",
+        "start": "node  dist/server.js",
+        "dev": "nodemon src/server.ts",
         "watch": "tsc-watch --esModuleInterop ./src/server.ts --outDir ./dist",
         "db:migrate": "db-migrate up",
         "db:create": "db-migrate db:create",
         "db:drop": "db-migrate db:drop",
         "db:fresh": "db-migrate reset && db-migrate up",
-        "init": "npm install && npm run db:migrate &&npm run start"
+        "init": "npm install && npm run db:migrate &&npm run start",
+        "zip" : "rm -r ./dist && npm run build&& cd ./dist && zip -r store_front_back.zip .",
+        "zip2" : "rm -r ./dist && npm run build && zip -r store_front_back.zip ./dist ./node_modules ./.env ./database.json ./package.json ./tsconfig.json ./package-lock.json"
+
     },
     "dependencies": {
         "bcrypt": "^5.1.0",

@@ -15,5 +15,13 @@
         "user": { "ENV": "TEST_DATABASE_USER" },
         "port": { "ENV": "TEST_DATABASE_PORT" },
         "password": { "ENV": "TEST_DATABASE_PASSWORD" }
+    },
+    "pro": {
+        "driver": { "ENV": "PRO_DATABASE_DRIVER" },
+        "host": { "ENV": "PRO_DATABASE_HOST" },
+        "database": { "ENV": "PRO_DATABASE_NAME" },
+        "user": { "ENV": "PRO_DATABASE_USER" },
+        "port": { "ENV": "PRO_DATABASE_PORT" },
+        "password": { "ENV": "PRO_DATABASE_PASSWORD" }
     }
 }

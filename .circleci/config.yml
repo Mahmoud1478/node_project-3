@@ -81,9 +81,9 @@ jobs:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           paths:
             - .back/node_modules
-      # - run:
-      #     name: "initailize eb"
-      #     command: ""
+      - run:
+          name: "initailize eb"
+          command: "cat `/.aws/config"
 
       - run:
           name: "deploying"

@@ -3,13 +3,15 @@ import userHandler from "./handlers/users/userHandler";
 import productHandler from "./handlers/products/productHandler";
 import validattorInit from "./init/validation";
 import ordersHandler from "./handlers/orders/ordersHandler";
+import dotenv from "dotenv";
 import Cors from "cors";
 
 const corsOption = {
-    origin: ["http://localhost:5173"],
+    // origin: ["http://localhost:5173", process.env.FRONT as string],
+    origin: "*",
 };
 const App: Application = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 App.listen(port, (): void => {
     console.log(`\nApplication started in http://localhost:${port}`);

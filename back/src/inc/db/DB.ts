@@ -1,34 +1,26 @@
 import { Pool, PoolClient } from "pg";
 import connection from "../../database";
-import DriverContract from "./constract/DriverConstract";
-
 import sql from "./sql";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const driver: new () => DriverContract = require(`./drivers/${
-    process.env.DATABASE_DRIVER || "pg"
-}`).default;
 class DB {
-    private driver: DriverContract = new driver();
+    private wheres: [string, string, string | number][] = [];
+    private joins: string[] = [];
     private table;
     private query: string;
+    private order_By = "";
+    private group_by = "";
+    private _limit = "";
     private values: (string | number)[] = [];
     private static db: Pool = connection;
     private static connection: PoolClient | undefined;
     private static group_mode = false;
-    private columns: string[] = ["*"];
 
     public constructor(table: string) {
         this.table = table;
         this.query = sql.select(this.table, "*");
     }
     public select(colums: string[] = ["*"]): DB {
-        this.columns = colums;
-        this.driver.setAttr("command", "select");
-        return this;
-    }
-    public setCommand(command: string): DB {
-        this.driver.setAttr("command", command);
+        this.query = sql.select(this.table, colums.toString());
         return this;
     }
     public async update<Type>(Entity: Type): Promise<Type[]> {
@@ -41,6 +33,7 @@ class DB {
                 valuesLen++;
             });
             this.query = sql.update(this.table, modColums.toString());
+            this.build();
             if (!DB.connection) {
                 DB.connection = await DB.db.connect();
             }
@@ -56,29 +49,32 @@ class DB {
             this.reset();
         }
     }
+    /**
+     * orderBy
+     */
     public orderBy(column: string, type = "ASC"): DB {
-        this.driver.setAttr("order_by", [column, type]);
+        this.order_By = ` ORDER BY ${column} ${type}`;
         return this;
     }
     public groupBy(columns: string[]): DB {
-        this.driver.setAttr("group_by", columns);
+        this.group_by = ` GROUP BY ${columns.toString()}`;
         return this;
     }
+    /**
+     * limit
+     */
     public limit(value: number): DB {
-        this.driver.setAttr("limit", value);
-        return this;
-    }
-    public offset(value: number): DB {
-        this.driver.setAttr("offset", value);
+        this._limit = ` LIMIT ${value}`;
         return this;
     }
     public join(table: string, localKey: string, foreignKey: string): DB {
-        this.driver.setAttr("join", {});
+        this.joins.push(sql.join(table, localKey, foreignKey));
         return this;
     }
     public async delete<Type>(): Promise<Type[]> {
         try {
             this.query = sql.delete(this.table);
+            this.build();
             if (!DB.connection) {
                 DB.connection = await DB.db.connect();
             }
@@ -125,26 +121,25 @@ class DB {
             this.reset();
         }
     }
-    public where(column: string, value: string | number, operator = "="): DB {
+    public where(colum: string, value: string | number, operator = "="): DB {
+        this.wheres.push([colum, operator, `($${this.values.length + 1})`]);
         this.values.push(value);
-        this.driver.setAttr("where", [column, operator, `($${this.values.length})`]);
         return this;
     }
-    public orWhere(column: string, value: string | number, operator = "="): DB {
-        this.values.push(value);
-        this.driver.setAttr("or", [column, operator, `($${this.values.length})`]);
-        return this;
-    }
+
     public whereIn(column: string, values: (string | number)[]): DB {
+        let values_count: number = this.values.length;
         const placeholder = values.map((item) => {
+            values_count++;
             this.values.push(item);
-            return `($${this.values.length})`;
+            return `$${values_count}`;
         });
-        this.driver.setAttr("where", [column, "IN", `(${placeholder.toString()})`]);
+        this.wheres.push([column, "IN", `(${placeholder.toString()})`]);
         return this;
     }
     public async get<Type>(): Promise<Type[]> {
         try {
+            this.build();
             if (!DB.connection) {
                 DB.connection = await DB.db.connect();
             }
@@ -161,7 +156,7 @@ class DB {
         }
     }
     public async find<Type>(column: string, value: string): Promise<Type | null> {
-        this.where(column, value);
+        this.where(column, value).build();
         try {
             if (!DB.connection) {
                 DB.connection = await DB.db.connect();
@@ -179,10 +174,20 @@ class DB {
             this.reset();
         }
     }
-    public toSql(): string {
-        return this.driver.build(this.table, this.columns.toString());
+    /**
+     * getQuery
+     * @return string
+     */
+    public getQuery(): string {
+        this.build();
+        return this.query;
     }
 
+    private build(): void {
+        sql.arrangement.forEach((item): void => {
+            this.query += this.handle_statement(item);
+        });
+    }
     public static async group<Type>(
         callback: () => Promise<void | Type | Type[] | null>
     ): Promise<void | Type | Type[] | null> {
@@ -214,6 +219,8 @@ class DB {
     private reset(): DB {
         this.query = sql.select(this.table, "*");
         this.values = [];
+        this.wheres = [];
+        this.joins = [];
         return this;
     }
     // public async transcaction<Type>(
@@ -256,6 +263,25 @@ class DB {
             DB.connection?.release();
             DB.connection = undefined;
         }
+    }
+    private handle_statement(statement: string): string {
+        const map: { [x: string]: () => string } = {
+            wheres: (): string => {
+                if (this.wheres.length) {
+                    const result: string[] = [];
+                    this.wheres.forEach((item): void => {
+                        result.push(item.join(" "));
+                    });
+                    return sql.where(result.join(" AND "));
+                }
+                return "";
+            },
+            joins: (): string => this.joins.join(" "),
+            limit: () => this._limit,
+            order_by: () => this.order_By,
+            group_by: () => this.group_by,
+        };
+        return map[statement]();
     }
 }
 export default DB;

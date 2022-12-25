@@ -15,9 +15,8 @@ jobs:
           node-version: '16.18'
       - checkout
       - run:
-          name : "build"
+          name : "install node modules"
           command: "npm back:install"
-      - run: "npm back:build"
 
 workflows:
   project_3:

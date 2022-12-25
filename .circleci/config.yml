@@ -1,0 +1,25 @@
+version: 2.1
+# orgs contain basc recipes and reproducible actions (install node, aws, etc.)
+orbs:
+  node: circleci/node@5.0.3
+  eb: circleci/aws-elastic-beanstalk@2.0.1
+  aws-cli: circleci/aws-cli@3.1.4
+  # different jobs are calles later in the workflows sections
+
+jobs:
+  build:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: '16.18'
+      - checkout
+      - run:
+          name : "build"
+          command: "npm back:install"
+      - run: "npm back:build"
+
+workflows:
+  project_3:
+    jobs:
+      - build

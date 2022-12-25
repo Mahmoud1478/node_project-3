@@ -10,7 +10,8 @@
         "preview": "vite preview",
         "lint": "eslint src/*.tsx src/**/*.tsx src/*.ts src/**/*.ts",
         "format": "prettier --config .prettierrc src/*.tsx src/**/*.tsx src/**/**/*.tsx  src/*.ts src/**/*.ts  --write",
-        "deploy" : "npm run build && aws s3 cp --recursive --acl public-read ./dist s3://storefrontfront"
+        "predeploy" : "chmod +x ./bin/predeploy.sh && ./bin/predeploy.sh",
+        "deploy" : "./bin/deploy.sh"
     },
     "dependencies": {
         "axios": "^1.1.3",

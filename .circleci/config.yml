@@ -29,9 +29,9 @@ jobs:
           key: v1-npm-deps-{{ checksum "./back/package-lock.json" }}
           path:
             - "./back/node_modules"
-      - run:
-          name: "bulding dist"
-          command : "npm run back:bulid"
+      # - run:
+      #     name: "bulding dist"
+      #     command : "npm run back:bulid"
 
 workflows:
   project_3:

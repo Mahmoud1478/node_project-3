@@ -7,7 +7,7 @@ orbs:
   # different jobs are calles later in the workflows sections
 
 jobs:
-  build:
+  build_back:
     docker:
       - image: "cimg/base:stable"
     steps:
@@ -24,6 +24,7 @@ jobs:
       - run:
           name : "install node modules"
           command: npm run back:install
+
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           paths:
@@ -31,8 +32,35 @@ jobs:
       - run:
           name: "bulding dist"
           command : npm run back:bulid
+  build_front:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: '18.12'
+      - checkout
+      - restore_cache:
+          keys:
+            # Find a cache corresponding to this specific package-lock.json checksum
+            # when this file is changed, this key will fail
+            - v1-npm-deps-{{ checksum "./front/package.json" }}
+            # Find the most recently generated cache used from any branch
+            - v1-npm-deps-
+      - run:
+          name : "install node modules"
+          command: npm run back:install
+
+      - save_cache:
+          key: v1-npm-deps-{{ checksum "./front/package.json" }}
+          paths:
+            - .front/node_modules
+      - run:
+          name: "bulding front dist"
+          command : npm run front:bulid
+
 
 workflows:
   project_3:
     jobs:
-      - build
+      - build_back
+      - build_front

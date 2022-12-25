@@ -2,7 +2,7 @@ import supertest from "supertest";
 import DB from "../../inc/db/DB";
 import ProductModel, { Product } from "../../models/product";
 import App from "../../server";
-describe("orders endpoint", (): void => {
+describe("orders endpoint", async (): Promise<void> => {
     const HttpRequest = supertest(App);
     let token: string;
     beforeAll(async () => {

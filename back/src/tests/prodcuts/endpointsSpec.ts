@@ -2,7 +2,7 @@ import supertest from "supertest";
 import App from "../../server";
 import { Product } from "../../models/product";
 
-describe("products endpoint", (): void => {
+describe("products endpoint", async (): Promise<void> => {
     const HttpRequest = supertest(App);
     let product: Product = {
         name: "product endpoint",

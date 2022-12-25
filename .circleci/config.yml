@@ -68,7 +68,7 @@ jobs:
             - v1-npm-deps-{{ checksum "./back/package.json" }}
             - v1-npm-deps-
       - run:
-          name : "install node modules"
+          name : "install back node modules"
           command: npm run back:install
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
@@ -76,17 +76,13 @@ jobs:
             - .back/node_modules
       - run:
           name: "initailize eb"
-          command: "cat ~/.aws/config"
-
-      - run:
-          name: "deploying"
-          command : npm run back:deploy
+          command: "cat ~/.aws/config"  
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./front/package.json" }}
             - v1-npm-deps-
       - run:
-          name : "install node modules"
+          name : "install front node modules"
           command: npm run front:install
 
       - save_cache:
@@ -94,8 +90,11 @@ jobs:
           paths:
             - .front/node_modules
       - run:
-          name: "deploying"
+          name: "front deploying"
           command : npm run front:deploy
+      - run:
+          name: "back deploying"
+          command : npm run back:deploy
 workflows:
   project_3:
     jobs:

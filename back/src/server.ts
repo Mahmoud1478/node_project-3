@@ -3,12 +3,11 @@ import userHandler from "./handlers/users/userHandler";
 import productHandler from "./handlers/products/productHandler";
 import validattorInit from "./init/validation";
 import ordersHandler from "./handlers/orders/ordersHandler";
-import dotenv from "dotenv";
 import Cors from "cors";
 
 const corsOption = {
-    // origin: ["http://localhost:5173", process.env.FRONT as string],
-    origin: "*",
+    origin: ["http://localhost:5173", "http://storefrontfront.s3-website-us-east-1.amazonaws.com"],
+    // origin: "*",
 };
 const App: Application = express();
 const port = process.env.PORT || 3000;

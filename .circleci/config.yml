@@ -82,8 +82,8 @@ jobs:
           paths:
             - .back/node_modules
       - run:
-          name: "bulding back dist"
-          command : npm run back:build
+          name: "deploying"
+          command : npm run back:deploy
   deploy_front:
     docker:
       - image: "cimg/base:stable"

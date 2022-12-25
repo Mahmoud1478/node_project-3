@@ -27,8 +27,8 @@
         "clear" : "rm -rf ./dist|| true",
         "predeploylocal" : "npm run clear && npm run build && cp -r ./.npmrc ./package.json ./package-lock.json ./.elasticbeanstalk dist && echo web: npm run start2 > dist/Procfile",
         "deploylocal" : "cd ./dist && eb deploy",
-        "predeploy" : "npm run clear && npm run build && cp -r ./.npmrc ./package.json ./Procfile ./package-lock.json ./.elasticbeanstalk dist",
-        "deploy" : "cd dist && eb use Storefront2-env && eb deploy"
+        "predeploy" : "npm run clear && npm run build && cp -r ./.npmrc ./package.json ./Procfile ./package-lock.json dist",
+        "deploy" : "eb use Storefront2-env && eb deploy"
 
     },
     "dependencies": {

@@ -35,9 +35,13 @@ jobs:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           paths:
             - .back/node_modules
-      # - run:
-      #     name: "bulding back dist"
-      #     command : npm run back:build
+      - run:
+          name: "bulding back dist"
+          command : npm run back:build
+      - run:
+          name : "initialize db"
+          command : npm db:init
+
       - run:
           name: "testing app"
           command : npm run back:test

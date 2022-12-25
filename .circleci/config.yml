@@ -43,7 +43,7 @@ jobs:
       - image: "cimg/base:stable"
     steps:
       - node/install:
-          node-version: '18.12'
+          node-version: '16.18'
       - checkout
       - restore_cache:
           keys:
@@ -89,7 +89,7 @@ jobs:
       - image: "cimg/base:stable"
     steps:
       - node/install:
-          node-version: '18.12'
+          node-version: '16.18'
       - aws-cli/setup
       - checkout
        # building front

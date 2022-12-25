@@ -60,13 +60,13 @@ jobs:
       - run:
           name: "bulding front dist"
           command : npm run front:build
-  deploy:
+  deploy_back:
     docker:
       - image: "cimg/base:stable"
     steps:
       - node/install:
-          node-version: '18.12'
-      - aws-cli/setup
+          node-version: '16.18'
+      # - aws-cli/setup
       - eb/setup
       - checkout
       # buliding back 
@@ -84,7 +84,15 @@ jobs:
       - run:
           name: "bulding back dist"
           command : npm run back:build
-      # building front
+  deploy_front:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: '18.12'
+      - aws-cli/setup
+      - checkout
+       # building front
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./front/package.json" }}
@@ -114,7 +122,10 @@ workflows:
           requires:
             - build_back_and_testing_it
             - build_front
-      - deploy:
+      - deploy_front:
+          requires: 
+            - hold
+      - deploy_back:
           requires: 
             - hold
 

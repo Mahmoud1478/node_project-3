@@ -32,6 +32,7 @@ jobs:
       - run:
           name: "bulding back dist"
           command : npm run back:build
+    
   build_front:
     docker:
       - image: "cimg/base:stable"
@@ -63,4 +64,6 @@ workflows:
   project_3:
     jobs:
       - build_back
-      - build_front
+      - build_front:
+          requires:
+            - build_back

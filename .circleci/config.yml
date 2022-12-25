@@ -40,7 +40,7 @@ jobs:
           command : npm run back:build
       - run:
           name : "initialize db"
-          command : npm db:init
+          command : npm run db:init
 
       - run:
           name: "testing app"

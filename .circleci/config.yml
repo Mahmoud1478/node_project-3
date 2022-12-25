@@ -7,9 +7,16 @@ orbs:
   # different jobs are calles later in the workflows sections
 
 jobs:
-  build_back:
+  build_back_and_testing_it:
     docker:
       - image: "cimg/base:stable"
+      - image: "circleci/postgres:12-alpine-ram"
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: toor
+          POSTGRES_DB: store_test
+        # ports:
+        #   - 5432:5432
     steps:
       - node/install:
           node-version: '16.18'
@@ -24,14 +31,17 @@ jobs:
       - run:
           name : "install node modules"
           command: npm run back:install
-
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           paths:
             - .back/node_modules
+      # - run:
+      #     name: "bulding back dist"
+      #     command : npm run back:build
       - run:
-          name: "bulding back dist"
-          command : npm run back:build
+          name: "testing app"
+          command : npm run back:test
+      
     
   build_front:
     docker:
@@ -63,10 +73,8 @@ jobs:
 workflows:
   project_3:
     jobs:
-      - build_back
-      - build_front:
-          requires:
-            - build_back
+      - build_back_and_testing_it
+      - build_front
       - hold:
           filters:
             branches:
@@ -74,4 +82,5 @@ workflows:
                 - master
           type: approval
           requires:
+            - build_back_and_testing_it
             - build_front

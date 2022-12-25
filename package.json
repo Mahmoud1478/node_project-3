@@ -2,6 +2,7 @@
     "scripts": {
         "front:install" : "cd ./front && npm install",
         "back:install" : "cd ./back && npm install",
+        "back:test" : "cd ./back && npm run test",
         "predeploy:back" : "cd ./back && npm predeploy",
         "back:build" : "cd ./back && npm run build ",
         "front:build" : "cd ./front && npm run build"

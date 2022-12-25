@@ -115,4 +115,5 @@ workflows:
             - build_back_and_testing_it
             - build_front
       - deploy:
-          requires: hold
+          requires: 
+            - hold

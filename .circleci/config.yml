@@ -14,9 +14,23 @@ jobs:
       - node/install:
           node-version: '16.18'
       - checkout
+      - restore_cache:
+          keys:
+            # Find a cache corresponding to this specific package-lock.json checksum
+            # when this file is changed, this key will fail
+            - v1-npm-deps-{{ checksum "./back/package-lock.json" }}
+            # Find the most recently generated cache used from any branch
+            - v1-npm-deps-
       - run:
           name : "install node modules"
           command: "npm run back:install"
+      - save_cache:
+          path:
+            - node_modules
+            key:  v1-npm-deps-{{ checksum "/back/package-lock.json" }}
+      - run:
+          name: "bulding dist"
+          command : "npm run back:bulid"
 
 workflows:
   project_3:

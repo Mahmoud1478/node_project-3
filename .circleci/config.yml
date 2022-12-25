@@ -66,7 +66,7 @@ jobs:
     steps:
       - node/install:
           node-version: '16.18'
-      # - aws-cli/setup
+      - aws-cli/setup
       - eb/setup
       - checkout
       # buliding back 

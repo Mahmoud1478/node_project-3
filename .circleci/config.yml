@@ -82,6 +82,9 @@ jobs:
           paths:
             - .back/node_modules
       - run:
+          name: "initailize eb"
+          command: eb init
+      - run:
           name: "deploying"
           command : npm run back:deploy
   deploy_front:

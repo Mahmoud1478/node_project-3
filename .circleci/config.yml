@@ -67,7 +67,7 @@ jobs:
       - node/install:
           node-version: '16.18'
       # - aws-cli/setup
-      - eb/setup
+      # - eb/setup
       - checkout
       # buliding back 
       - restore_cache:
@@ -83,7 +83,12 @@ jobs:
             - .back/node_modules
       - run:
           name: "initailize eb"
-          command: eb init
+          command: |
+                  sudo apt-get -y -qq update
+                  sudo apt-get install python-pip python-dev build-essential
+                  sudo pip install --upgrade setuptools
+                  sudo pip install awsebcli --upgrade
+
       - run:
           name: "deploying"
           command : npm run back:deploy

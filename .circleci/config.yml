@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name : "install node modules"
-          command: "npm back:install"
+          command: "npm run back:install"
 
 workflows:
   project_3:

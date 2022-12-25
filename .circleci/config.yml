@@ -74,4 +74,4 @@ workflows:
             - build
       - build_front:
           requires:
-            - build_back
+            - hold

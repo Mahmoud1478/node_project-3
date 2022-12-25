@@ -25,7 +25,6 @@ jobs:
       #     name : "install node modules"
       #     command: npm run back:install
       - save_cache:
-          name: Save NPM Package Cache
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           path:
             - .back/node_modules

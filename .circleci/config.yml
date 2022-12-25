@@ -23,7 +23,7 @@ jobs:
             - v1-npm-deps-
       - run:
           name : "install node modules"
-          command: "npm run back:install"
+          command: npm run back:install
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package-lock.json" }}
           path:

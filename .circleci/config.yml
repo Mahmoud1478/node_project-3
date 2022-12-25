@@ -63,44 +63,44 @@ jobs:
           name: "bulding front dist"
           command : npm run front:build
   # deploy:
-    docker:
-      - image: "cimg/base:stable"
-    steps:
-      - node/install:
-          node-version: '18.12'
-      - aws-cli/setup
-      - eb/setup
-      - checkout
-      # buliding back 
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "./back/package.json" }}
-            - v1-npm-deps-
-      - run:
-          name : "install back node modules"
-          command: npm run back:install
-      - save_cache:
-          key: v1-npm-deps-{{ checksum "./back/package.json" }}
-          paths:
-            - .back/node_modules
-      - run:
-          name: "bulding back dist"
-          command : npm run back:build
-      # building front
-       - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "./front/package.json" }}
-            - v1-npm-deps-
-      - run:
-          name : "install front node modules"
-          command: npm run front:install
-      - save_cache:
-          key: v1-npm-deps-{{ checksum "./front/package.json" }}
-          paths:
-            - .front/node_modules
-      - run:
-          name: "bulding front dist"
-          command : npm run front:build   
+    # docker:
+    #   - image: "cimg/base:stable"
+    # steps:
+    #   - node/install:
+    #       node-version: '18.12'
+    #   - aws-cli/setup
+    #   - eb/setup
+    #   - checkout
+    #   # buliding back 
+    #   - restore_cache:
+    #       keys:
+    #         - v1-npm-deps-{{ checksum "./back/package.json" }}
+    #         - v1-npm-deps-
+    #   - run:
+    #       name : "install back node modules"
+    #       command: npm run back:install
+    #   - save_cache:
+    #       key: v1-npm-deps-{{ checksum "./back/package.json" }}
+    #       paths:
+    #         - .back/node_modules
+    #   - run:
+    #       name: "bulding back dist"
+    #       command : npm run back:build
+    #   # building front
+    #    - restore_cache:
+    #       keys:
+    #         - v1-npm-deps-{{ checksum "./front/package.json" }}
+    #         - v1-npm-deps-
+    #   - run:
+    #       name : "install front node modules"
+    #       command: npm run front:install
+    #   - save_cache:
+    #       key: v1-npm-deps-{{ checksum "./front/package.json" }}
+    #       paths:
+    #         - .front/node_modules
+    #   - run:
+    #       name: "bulding front dist"
+    #       command : npm run front:build   
 workflows:
   project_3:
     jobs:

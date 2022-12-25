@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import axios from '../../api/axios';
+import { StateContext } from '../../store/StateProvider';
+import acions from '../../store/auth/acions';
 
 const SignUp: React.FC = () => {
+    const { setAuth } = useContext(StateContext);
     const submition = async (e: React.FormEvent): Promise<void> => {
-        e.preventDefault();
-        axios
-            .post('/users/sign-up', new FormData(e.target as HTMLFormElement))
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => console.log(err));
+        try {
+            e.preventDefault();
+            const {
+                data: { user, token, type },
+            } = await axios.post('/users/sign-up', new FormData(e.target as HTMLFormElement));
+            setAuth({
+                type: acions.SET_AUTH,
+                paylod: {
+                    user,
+                    token,
+                },
+            });
+            localStorage.setItem(
+                'token',
+                JSON.stringify({
+                    type,
+                    value: token,
+                })
+            );
+            localStorage.setItem('user', JSON.stringify(user));
+        } catch (e) {
+            console.log(e);
+        }
     };
     return (
         // <!-- Section: Design Block -->

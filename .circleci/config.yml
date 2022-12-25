@@ -25,10 +25,10 @@ jobs:
           name : "install node modules"
           command: npm run back:install
       - save_cache:
-          name: Save npm Package Cache
+          name: Save NPM Package Cache
           key: v1-npm-deps-{{ checksum "./back/package-lock.json" }}
           path:
-            - "./back/node_modules"
+            - node_modules
       # - run:
       #     name: "bulding dist"
       #     command : "npm run back:bulid"

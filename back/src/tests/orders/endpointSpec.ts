@@ -2,26 +2,35 @@ import supertest from "supertest";
 import DB from "../../inc/db/DB";
 import ProductModel, { Product } from "../../models/product";
 import App from "../../server";
+let token: string;
+const HttpRequest = supertest(App);
+async function init(): Promise<void> {
+    await DB.group(async (): Promise<void> => {
+        await new ProductModel().create<Product>({
+            name: "test",
+            price: "123",
+        });
+        await new ProductModel().create<Product>({
+            name: "test1",
+            price: "123",
+        });
+    });
+    const response = await HttpRequest.post("/users/sign-up").send({
+        firstname: "order-test",
+        lastname: "order-test",
+        password: 123,
+    });
+    token = response.body.token;
+}
+
 describe("orders endpoint", async (): Promise<void> => {
-    const HttpRequest = supertest(App);
-    let token: string;
     beforeAll(async () => {
-        await DB.group(async (): Promise<void> => {
-            await new ProductModel().create<Product>({
-                name: "test",
-                price: "123",
-            });
-            await new ProductModel().create<Product>({
-                name: "test1",
-                price: "123",
-            });
-        });
-        const response = await HttpRequest.post("/users/sign-up").send({
-            firstname: "order-test",
-            lastname: "order-test",
-            password: 123,
-        });
-        token = response.body.token;
+        try {
+            await init();
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     });
 
     it("closed orders can't be access without token", async (): Promise<void> => {

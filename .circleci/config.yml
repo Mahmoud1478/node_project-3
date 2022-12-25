@@ -28,7 +28,7 @@ jobs:
       - save_cache:
           path:
             - ./back/node_modules
-            key: v1-npm-deps-{{ checksum "./back/package.json" }}
+          key: v1-npm-deps-{{ checksum "./back/package.json" }}
       - run:
           name: "bulding dist"
           command : "npm run back:bulid"

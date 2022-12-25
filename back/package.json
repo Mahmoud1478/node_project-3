@@ -14,7 +14,7 @@
         "test2": "ENV='test' node dist/server",
         "lint": "eslint src/*.ts src/**/*.ts",
         "format": "prettier --config .prettierrc src/*.ts src/**/*.ts --write",
-        "start": "node  dist/server.js",
+        "start": "node  server.js",
         "start2": "node server.js",
         "dev": "nodemon src/server.ts",
         "watch": "tsc-watch --esModuleInterop ./src/server.ts --outDir ./dist",
@@ -27,8 +27,8 @@
         "clear" : "rm -rf ./dist|| true",
         "predeploylocal" : "npm run clear && npm run build && cp -r ./.npmrc ./package.json ./package-lock.json ./.elasticbeanstalk dist && echo web: npm run start2 > dist/Procfile",
         "deploylocal" : "cd ./dist && eb deploy",
-        "predeploy" : "npm run clear && npm run build && cp -r ./.npmrc ./package.json ./Procfile ./package-lock.json dist",
-        "deploy" : "eb deploy Storefront2-env "
+        "predeploy" : "chmod +x ./bin/predeploy.sh && ./bin/predeploy.sh",
+        "deploy" : "cd ./dist && eb deploy"
 
     },
     "dependencies": {

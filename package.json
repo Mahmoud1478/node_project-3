@@ -3,7 +3,7 @@
         "front:install" : "cd ./front && npm install",
         "back:install" : "cd ./back && npm install",
         "predeploy:back" : "cd ./back && npm predeploy",
-        "back:bulid" : "cd ./back && npm run build ",
+        "back:build" : "cd ./back && npm run build ",
         "front:build" : "cd ./front && npm run build"
     }
 }

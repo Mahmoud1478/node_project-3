@@ -30,8 +30,8 @@ jobs:
           paths:
             - .back/node_modules
       - run:
-          name: "bulding dist"
-          command : npm run back:bulid
+          name: "bulding back dist"
+          command : npm run back:build
   build_front:
     docker:
       - image: "cimg/base:stable"
@@ -56,7 +56,7 @@ jobs:
             - .front/node_modules
       - run:
           name: "bulding front dist"
-          command : npm run front:bulid
+          command : npm run front:build
 
 
 workflows:

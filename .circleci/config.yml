@@ -4,7 +4,6 @@ orbs:
   node: circleci/node@5.0.3
   eb: circleci/aws-elastic-beanstalk@2.0.1
   aws-cli: circleci/aws-cli@3.1.4
-  # different jobs are calles later in the workflows sections
 
 jobs:
   build_back_and_testing_it:
@@ -15,16 +14,15 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: toor
           POSTGRES_DB: store_test
+        ports:
+         - 5432/5432
     steps:
       - node/install:
           node-version: '16.18'
       - checkout
       - restore_cache:
           keys:
-            # Find a cache corresponding to this specific package-lock.json checksum
-            # when this file is changed, this key will fail
             - v1-npm-deps-{{ checksum "./back/package.json" }}
-            # Find the most recently generated cache used from any branch
             - v1-npm-deps-
       - run:
           name : "install node modules"
@@ -51,10 +49,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            # Find a cache corresponding to this specific package-lock.json checksum
-            # when this file is changed, this key will fail
             - v1-npm-deps-{{ checksum "./front/package.json" }}
-            # Find the most recently generated cache used from any branch
             - v1-npm-deps-
       - run:
           name : "install node modules"
@@ -79,10 +74,7 @@ jobs:
       # buliding back 
       - restore_cache:
           keys:
-            # Find a cache corresponding to this specific package-lock.json checksum
-            # when this file is changed, this key will fail
             - v1-npm-deps-{{ checksum "./back/package.json" }}
-            # Find the most recently generated cache used from any branch
             - v1-npm-deps-
       - run:
           name : "install back node modules"
@@ -97,10 +89,7 @@ jobs:
       # building front
        - restore_cache:
           keys:
-            # Find a cache corresponding to this specific package-lock.json checksum
-            # when this file is changed, this key will fail
             - v1-npm-deps-{{ checksum "./front/package.json" }}
-            # Find the most recently generated cache used from any branch
             - v1-npm-deps-
       - run:
           name : "install front node modules"

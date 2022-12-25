@@ -71,7 +71,7 @@ workflows:
                 - master
           type: approval
           requires:
-            - build
+            - build_back
       - build_front:
           requires:
             - hold

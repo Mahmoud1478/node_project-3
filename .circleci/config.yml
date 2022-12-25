@@ -23,15 +23,14 @@ jobs:
             - v1-npm-deps-
       - run:
           name : "install node modules"
-          command: npm run back:install
-
+          command: "npm run back:install"
       - save_cache:
           path:
             - ./back/node_modules
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
       - run:
           name: "bulding dist"
-          command : npm run back:bulid
+          command : "npm run back:bulid"
 
 workflows:
   project_3:

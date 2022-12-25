@@ -11,10 +11,10 @@ jobs:
     docker:
       - image: "cimg/base:stable"
       - image: "circleci/postgres:12-alpine-ram"
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: toor
-          POSTGRES_DB: store_test
+          environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: toor
+            POSTGRES_DB: store_test
     steps:
       - node/install:
           node-version: '16.18'

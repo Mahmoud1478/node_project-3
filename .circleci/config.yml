@@ -83,7 +83,7 @@ jobs:
             - .back/node_modules
       - run:
           name: "initailize eb"
-          command: "cat `/.aws/config"
+          command: "cat ~/.aws/config"
 
       - run:
           name: "deploying"

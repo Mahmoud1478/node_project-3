@@ -21,16 +21,16 @@ jobs:
             - v1-npm-deps-{{ checksum "./back/package.json" }}
             # Find the most recently generated cache used from any branch
             - v1-npm-deps-
-      # - run:
-      #     name : "install node modules"
-      #     command: npm run back:install
+      - run:
+          name : "install node modules"
+          command: npm run back:install
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
           paths:
             - .back/node_modules
-      # - run:
-      #     name: "bulding dist"
-      #     command : "npm run back:bulid"
+      - run:
+          name: "bulding dist"
+          command : npm run back:bulid
 
 workflows:
   project_3:

@@ -6,6 +6,8 @@
         "predeploy:back" : "cd ./back && npm predeploy",
         "back:build" : "cd ./back && npm run build",
         "db:init" : "cd ./back && npm run test_db_init",
-        "front:build" : "cd ./front && npm run build"
+        "front:build" : "cd ./front && npm run build",
+        "front:deploy" : "cd ./front && npm deploy"
+
     }
 }

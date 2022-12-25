@@ -106,8 +106,8 @@ jobs:
           paths:
             - .front/node_modules
       - run:
-          name: "bulding front dist"
-          command : npm run front:build
+          name: "deploying"
+          command : npm run front:deploy
 workflows:
   project_3:
     jobs:

@@ -64,6 +64,14 @@ workflows:
   project_3:
     jobs:
       - build_back
+      - hold:
+          filters:
+            branches:
+              only:
+                - master
+          type: approval
+          requires:
+            - build
       - build_front:
           requires:
             - build_back

@@ -39,12 +39,9 @@ jobs:
       - run:
           name : "initialize db"
           command : npm run db:init
-
       - run:
           name: "testing app"
-          command : npm run back:test
-      
-    
+          command : npm run back:test    
   build_front:
     docker:
       - image: "cimg/base:stable"
@@ -70,7 +67,6 @@ jobs:
       - run:
           name: "bulding front dist"
           command : npm run front:build
-
   deploy:
      docker:
       - image: "cimg/base:stable"
@@ -98,7 +94,6 @@ jobs:
       - run:
           name: "bulding back dist"
           command : npm run back:build
-
       # building front
        - restore_cache:
           keys:
@@ -116,12 +111,7 @@ jobs:
             - .front/node_modules
       - run:
           name: "bulding front dist"
-          command : npm run front:build
-     
-
-      
-
-
+          command : npm run front:build   
 workflows:
   project_3:
     jobs:

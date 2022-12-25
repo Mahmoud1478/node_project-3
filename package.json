@@ -5,7 +5,7 @@
         "back:test" : "cd ./back && npm run test",
         "predeploy:back" : "cd ./back && npm predeploy",
         "back:build" : "cd ./back && npm run build ",
-        "db:init" : "cd ./back && db-migrate --env test reset && db-migrate --env test up",
+        "db:init" : "cd ./back && npm test_db_init",
         "front:build" : "cd ./front && npm run jasmine"
     }
 }

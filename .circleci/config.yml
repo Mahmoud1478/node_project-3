@@ -80,7 +80,7 @@ jobs:
             - .back/node_modules
       - run:
           name: "initialize elasticbeanstalk"
-          command : eb init $EB_APP_NAME --platphorm node.js --region $AWS_REGION
+          command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
       
       # build front 
       - restore_cache:

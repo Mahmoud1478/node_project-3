@@ -17,7 +17,6 @@ jobs:
       - node/install:
           node-version: '16.18'
       - checkout
-
       # building back
       - restore_cache:
           keys:
@@ -39,22 +38,6 @@ jobs:
       - run:
           name: "app testing"
           command : npm run back:test    
-      # # building front
-      # - restore_cache:
-      #     keys:
-      #       - v1-npm-deps-{{ checksum "./front/package.json" }}
-      #       - v1-npm-deps-
-      # - run:
-      #     name : "install front node modules"
-      #     command: npm run front:install
-
-      # - save_cache:
-      #     key: v1-npm-deps-{{ checksum "./front/package.json" }}
-      #     paths:
-      #       - .front/node_modules
-      # - run:
-      #     name: "bulding front dist"
-      #     command : npm run front:build
   build_front:
     docker:
       - image: "cimg/base:stable"
@@ -89,21 +72,21 @@ jobs:
       - eb/setup
       - checkout
 
-      # buliding back 
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "./back/package.json" }}
-            - v1-npm-deps-
-      - run:
-          name : "install back node modules"
-          command: npm run back:install
-      - save_cache:
-          key: v1-npm-deps-{{ checksum "./back/package.json" }}
-          paths:
-            - .back/node_modules
-      - run:
-          name: "initialize elasticbeanstalk"
-          command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
+      # # buliding back 
+      # - restore_cache:
+      #     keys:
+      #       - v1-npm-deps-{{ checksum "./back/package.json" }}
+      #       - v1-npm-deps-
+      # - run:
+      #     name : "install back node modules"
+      #     command: npm run back:install
+      # - save_cache:
+      #     key: v1-npm-deps-{{ checksum "./back/package.json" }}
+      #     paths:
+      #       - .back/node_modules
+      # - run:
+      #     name: "initialize elasticbeanstalk"
+      #     command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
       
       # build front 
       - restore_cache:

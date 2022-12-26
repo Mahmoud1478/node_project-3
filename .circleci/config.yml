@@ -71,23 +71,23 @@ jobs:
       - aws-cli/setup
       - eb/setup
       - checkout
+       - run:
+          name: "initialize elasticbeanstalk"
+          command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
 
-      # # buliding back 
-      # - restore_cache:
-      #     keys:
-      #       - v1-npm-deps-{{ checksum "./back/package.json" }}
-      #       - v1-npm-deps-
-      # - run:
-      #     name : "install back node modules"
-      #     command: npm run back:install
-      # - save_cache:
-      #     key: v1-npm-deps-{{ checksum "./back/package.json" }}
-      #     paths:
-      #       - .back/node_modules
-      # - run:
-      #     name: "initialize elasticbeanstalk"
-      #     command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
-      
+      # buliding back 
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "./back/package.json" }}
+            - v1-npm-deps-
+      - run:
+          name : "install back node modules"
+          command: npm run back:install
+      - save_cache:
+          key: v1-npm-deps-{{ checksum "./back/package.json" }}
+          paths:
+            - .back/node_modules
+     
       # build front 
       - restore_cache:
           keys:

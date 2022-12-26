@@ -73,7 +73,10 @@ jobs:
       - checkout
       - run:
           name: "initialize elasticbeanstalk"
-          command : eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
+          command : |
+                    cd back/
+                    eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
+                    cd ..
 
       # buliding back 
       - restore_cache:

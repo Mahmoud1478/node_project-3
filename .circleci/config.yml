@@ -5,7 +5,7 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.4
 
 jobs:
-  build:
+  build_back:
     docker:
       - image: "cimg/base:stable"
       - image: "circleci/postgres:12-alpine-ram"
@@ -37,10 +37,32 @@ jobs:
           name : "initialize test db"
           command : npm run db:init
       - run:
-          name: "testing app"
+          name: "app testing"
           command : npm run back:test    
-      
-      # building front
+      # # building front
+      # - restore_cache:
+      #     keys:
+      #       - v1-npm-deps-{{ checksum "./front/package.json" }}
+      #       - v1-npm-deps-
+      # - run:
+      #     name : "install front node modules"
+      #     command: npm run front:install
+
+      # - save_cache:
+      #     key: v1-npm-deps-{{ checksum "./front/package.json" }}
+      #     paths:
+      #       - .front/node_modules
+      # - run:
+      #     name: "bulding front dist"
+      #     command : npm run front:build
+  build_front:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: '16.18'
+      - checkout
+       # building front
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./front/package.json" }}
@@ -56,6 +78,7 @@ jobs:
       - run:
           name: "bulding front dist"
           command : npm run front:build
+
   deploy:
     docker:
       - image: "cimg/base:stable"
@@ -106,7 +129,8 @@ jobs:
 workflows:
   project_3:
     jobs:
-      - build
+      - build_back
+      - build_front
       - hold:
           filters:
             branches:
@@ -114,7 +138,8 @@ workflows:
                 - master
           type: approval
           requires:
-            - build
+            - build_back
+            - build_front
       - deploy:
           requires: 
             - hold

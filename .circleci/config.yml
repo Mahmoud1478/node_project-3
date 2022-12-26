@@ -1,5 +1,4 @@
 version: 2.1
-# orgs contain basc recipes and reproducible actions (install node, aws, etc.)
 orbs:
   node: circleci/node@5.0.3
   eb: circleci/aws-elastic-beanstalk@2.0.1
@@ -18,12 +17,14 @@ jobs:
       - node/install:
           node-version: '16.18'
       - checkout
+
+      # building back
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./back/package.json" }}
             - v1-npm-deps-
       - run:
-          name : "install node modules"
+          name : "install back node modules"
           command: npm run back:install
       - save_cache:
           key: v1-npm-deps-{{ checksum "./back/package.json" }}
@@ -33,17 +34,19 @@ jobs:
           name: "bulding back dist"
           command : npm run back:build
       - run:
-          name : "initialize db"
+          name : "initialize test db"
           command : npm run db:init
       - run:
           name: "testing app"
           command : npm run back:test    
+      
+      # building front
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./front/package.json" }}
             - v1-npm-deps-
       - run:
-          name : "install node modules"
+          name : "install front node modules"
           command: npm run front:install
 
       - save_cache:
@@ -62,6 +65,7 @@ jobs:
       - aws-cli/setup
       - eb/setup
       - checkout
+
       # buliding back 
       - restore_cache:
           keys:
@@ -75,8 +79,10 @@ jobs:
           paths:
             - .back/node_modules
       - run:
-          name: "initailize eb"
-          command: "cat ~/.aws/config"  
+          name: "initialize elasticbeanstalk"
+          command : eb init $EB_APP_NAME --platphorm node.js --region $AWS_REGION
+      
+      # build front 
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "./front/package.json" }}
@@ -89,6 +95,8 @@ jobs:
           key: v1-npm-deps-{{ checksum "./front/package.json" }}
           paths:
             - .front/node_modules
+      
+      # deploying
       - run:
           name: "front deploying"
           command : npm run front:deploy

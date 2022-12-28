@@ -9,6 +9,7 @@
     "scripts": {
         "jasmine": "jasmine",
         "test_db_init" : "db-migrate --env test reset && db-migrate --env test up",
+        "pro_db_synic" : "db-migrate --env pro up",
         "build": "npx tsc",
         "test": "db-migrate --env test reset && db-migrate --env test up && npm run build && ENV='test' npm run jasmine ",
         "test2": "ENV='test' node dist/server",

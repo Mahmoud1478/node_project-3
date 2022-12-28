@@ -53,7 +53,6 @@ jobs:
       - run:
           name : "install front node modules"
           command: npm run front:install
-
       - save_cache:
           key: v1-npm-deps-{{ checksum "./front/package.json" }}
           paths:
@@ -61,6 +60,9 @@ jobs:
       - run:
           name: "bulding front dist"
           command : npm run front:build
+      - run:
+          name: "testing front"
+          command : npm run front:test
 
   deploy:
     docker:
@@ -74,9 +76,9 @@ jobs:
       - run:
           name: "initialize elasticbeanstalk"
           command : |
-                    cd back/
-                    eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
-                    cd ..
+              cd back/
+              eb init "$EB_APP_NAME" --platform node.js --region "$AWS_REGION"
+              cd ..
 
       # buliding back 
       - restore_cache:
@@ -103,7 +105,15 @@ jobs:
           key: v1-npm-deps-{{ checksum "./front/package.json" }}
           paths:
             - .front/node_modules
+      # setiing env
+      - run:
+          name: "set environment variables"
+          command : eb setenv ENV=pro TOKEN_SECRET=$TOKEN_SECRET PORT=$PORT BCYPT_SALT=$BCYPT_SALT BCYPT_SECRET=$BCYPT_SECRET PRO_DATABASE_DRIVER=$PRO_DATABASE_DRIVER PRO_DATABASE_HOST=$PRO_DATABASE_HOST PRO_DATABASE_USER=$PRO_DATABASE_USER PRO_DATABASE_PASSWORD=$PRO_DATABASE_PASSWORD PRO_DATABASE_NAME=$PRO_DATABASE_NAME PRO_DATABASE_PORT=$PRO_DATABASE_PORT
       
+      # synic db tables
+      - run:
+          name: "prepare database"
+          command : npm run pro_db_synic
       # deploying
       - run:
           name: "front deploying"

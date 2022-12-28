@@ -3,11 +3,13 @@
         "front:install" : "cd ./front && npm install",
         "back:install" : "cd ./back && npm install",
         "back:test" : "cd ./back && npm run jasmine",
+        "front:test" : "cd ./front && npm run test",
         "back:deploy" : "cd ./back && npm run deploy",
         "back:build" : "cd ./back && npm run build",
         "db:init" : "cd ./back && npm run test_db_init",
         "front:build" : "cd ./front && npm run build",
-        "front:deploy" : "cd ./front && npm run deploy"
+        "front:deploy" : "cd ./front && npm run deploy",
+        "pro_db_synic" : "cd ./back && npm run pro_db_synic"
 
     }
 }

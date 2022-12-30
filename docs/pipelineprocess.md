@@ -26,5 +26,6 @@
     * install & configure eb cli
     * build back-end 
     * build front-end
+    * setting env variables
     * deploy fornt-end
     * deploy back-end
